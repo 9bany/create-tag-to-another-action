@@ -7,9 +7,15 @@ jobs:
     steps:
       - name: Hello world action step
         id: hello
-        uses: 9bany/create-tag-to-another-action@v1.0
+        uses: 9bany/create-tag-to-another-action@v1.0-rc0
         with:
-          who-to-greet: 'Mona the Octocat'
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          owner: 9bany
+          reponame: create-tag-to-another-action-example
+          tag: v1.0.0
+          message: v1.0.0
+          name: 9bany
+          email: bany.y0599@gmail.com
       # Use the output from the `hello` step
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
