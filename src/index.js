@@ -1,5 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+const crypto = require('crypto')
 const { Octokit } = require("octokit");
 
 const sha256 = require('simple-sha256')
@@ -39,7 +40,9 @@ async function createTag({
     const octokit = new Octokit({
         auth: personalToken
     })
-    const hash = await sha256(tag)
+    
+    const shasum = crypto.createHash('sha1')
+    const hash = shasum.digest('hex')
     
     await octokit.request(`POST /repos/${owner}/${reponame}/git/tags`, {
         owner: owner,
