@@ -12,8 +12,8 @@ jobs:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           owner: 9bany
           reponame: create-tag-to-another-action-example
-          tag: v1.0.3
-          message: v1.0.3
+          tag: v1.0.4
+          message: v1.0.4
           name: 9bany
           email: bany.y0599@gmail.com
           branch: master
