@@ -6183,6 +6183,28 @@ function onceStrict (fn) {
 
 /***/ }),
 
+/***/ 9966:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+/*! simple-sha256. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
+module.exports = sha256
+module.exports.sync = sha256sync
+
+const crypto = __nccwpck_require__(6113)
+
+async function sha256 (buf) {
+  return sha256sync(buf)
+}
+
+function sha256sync (buf) {
+  return crypto.createHash('sha256')
+    .update(buf)
+    .digest('hex')
+}
+
+
+/***/ }),
+
 /***/ 2339:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -8707,6 +8729,14 @@ module.exports = require("assert");
 
 /***/ }),
 
+/***/ 6113:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("crypto");
+
+/***/ }),
+
 /***/ 2361:
 /***/ ((module) => {
 
@@ -8862,18 +8892,59 @@ var __webpack_exports__ = {};
 (() => {
 const core = __nccwpck_require__(8864);
 const github = __nccwpck_require__(6366);
+const sha256 = __nccwpck_require__(9966)
 
 try {
-    // `who-to-greet` input defined in action metadata file
-    const nameToGreet = core.getInput('who-to-greet');
-    console.log(`Hello ${nameToGreet}!`);
-    const time = (new Date()).toTimeString();
-    core.setOutput("time", time);
-    // Get the JSON webhook payload for the event that triggered the workflow
-    const payload = JSON.stringify(github.context.payload, undefined, 2)
-    console.log(`The event payload: ${payload}`);
+    
+    const token = core.getInput('token');
+    const owner = core.getInput('owner');
+    const reponame = core.getInput('reponame');
+    const tag = core.getInput('tag');
+    const message = core.getInput('message');
+    const name = core.getInput('name');
+    const email = core.getInput('email');
+
+    createTag({
+        personalToken: token,
+        owner,
+        reponame,
+        tag,
+        message,
+        name,
+        email,
+    })
 } catch (error) {
     core.setFailed(error.message);
+}
+
+async function createTag({
+    personalToken,
+    owner,
+    reponame,
+    tag,
+    message,
+    name,
+    email,
+}) {
+    const octokit = new Octokit({
+        auth: personalToken
+    })
+    const hash = await sha256(tag)
+    const time = (new Date()).toTimeString();
+    
+    await octokit.request(`POST /repos/${owner}/${reponame}/git/tags`, {
+        owner: owner,
+        repo: reponame,
+        tag: tag,
+        message: !message ? tag : message,
+        object: hash,
+        type: 'commit',
+        tagger: {
+            name: name,
+            email: email,
+            date: time
+        }
+    })
 }
 })();
 

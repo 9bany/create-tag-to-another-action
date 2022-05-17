@@ -25,7 +25,7 @@ try {
     core.setFailed(error.message);
 }
 
-function createTag({
+async function createTag({
     personalToken,
     owner,
     reponame,
@@ -38,7 +38,7 @@ function createTag({
         auth: personalToken
     })
     const hash = await sha256(tag)
-    ;const time = (new Date()).toTimeString();
+    const time = (new Date()).toTimeString();
     
     await octokit.request(`POST /repos/${owner}/${reponame}/git/tags`, {
         owner: owner,
