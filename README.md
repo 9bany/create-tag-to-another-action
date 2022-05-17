@@ -1,7 +1,9 @@
-# Create a tag to repository
-An action that create a tag and push to another repository.
+# Create tag
+An action that create a tag and push to repository.
 
-
+## Resolve cases
+- [x] Triggering by other repository.
+- [x] Create a tag for a repository.
 ## Secrets
 
 - `GITHUB_PERSONAL_TOKEN` — **Required.** [Generate new token](https://github.com/settings/tokens)
