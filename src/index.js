@@ -12,6 +12,7 @@ try {
     const message = core.getInput('message');
     const name = core.getInput('name');
     const email = core.getInput('email');
+    const branch = core.getInput('branch');
 
     createTag({
         personalToken: token,
@@ -21,6 +22,7 @@ try {
         message,
         name,
         email,
+        branch
     })
 } catch (error) {
     core.setFailed(error.message);
