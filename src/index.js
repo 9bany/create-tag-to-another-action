@@ -1,6 +1,4 @@
 const core = require('@actions/core');
-const github = require('@actions/github');
-const crypto = require('crypto')
 const { Octokit } = require("octokit");
 const getBranchSHA = require('./branch');
 const tagCreate = require('./tag_create');
