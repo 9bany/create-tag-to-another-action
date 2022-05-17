@@ -1,10 +1,27 @@
 name: 'Hello World'
 description: 'Greet someone and record the time'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  token:
+    description: 'Git personal token'
     required: true
-    default: 'World'
+  owner:
+    description: 'Owner your repository you want to push tag'
+    required: true
+  reponame:
+    description: 'Repository name you want to push tag'
+    required: true
+  tag:
+    description: 'Your tag want to push'
+    required: true
+  message:
+    description: 'Commit message for tag'
+    required: true
+  name:
+    description: 'Your username on github'
+    required: true
+  email:
+    description: 'Your email'
+    required: true
 outputs:
   time: # id of output
     description: 'The time we greeted you'
