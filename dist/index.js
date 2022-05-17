@@ -20134,6 +20134,101 @@ try {
 
 /***/ }),
 
+/***/ 3516:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+
+const { Octokit } = __nccwpck_require__(9509);
+const { ERROR } = __nccwpck_require__(8068);
+
+function getBranchSHA({ 
+    token = process.env.TOKEN, 
+    branch, 
+    owner, 
+    repo
+}) {
+    return new Promise((resolve, reject) => {
+        const octokit = new Octokit({
+            auth: token
+        })
+    
+        octokit.request(`GET /repos/${owner}/${repo}/branches/${branch}`, {
+            owner: owner,
+            repo: repo,
+            branch: branch
+        }).catch(error => {
+            reject(ERROR.CANNOT_GET_BRANCH)
+        }).then(response => {
+            let { data } = response
+            resolve(data.commit.sha)    
+        })
+        
+    })
+}
+
+module.exports = getBranchSHA;
+
+/***/ }),
+
+/***/ 8068:
+/***/ ((module) => {
+
+
+const ERROR = {
+    CANNOT_GET_BRANCH: 'CANNOT_GET_BRANCH',
+    CANNOT_CREATE_TAG: 'CANNOT_CREATE_TAG',
+}
+
+module.exports = {
+    ERROR
+}
+
+/***/ }),
+
+/***/ 291:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const { Octokit } = __nccwpck_require__(9509);
+const { ERROR } = __nccwpck_require__(8068);
+
+function tagCreate({
+    token = process.env.TOKEN, 
+    message, 
+    owner, 
+    repo,
+    tag,
+    object,
+    name,
+    email
+}) {
+    return new Promise((resolve, reject) => {
+        const octokit = new Octokit({
+            auth: token
+        })
+        octokit.request(`POST /repos/${owner}/${repo}/git/tags`, {
+            owner: owner,
+            repo: repo,
+            tag: tag,
+            message: !message ? tag : message,
+            object: object,
+            type: 'commit',
+            tagger: {
+                name: name,
+                email: email
+            }
+        }).catch(error => {
+            reject(ERROR.CANNOT_CREATE_TAG)
+        }).then(response => {
+            let { data } = response
+            resolve(data.sha)
+        })
+    })
+}
+
+module.exports = tagCreate;
+
+/***/ }),
+
 /***/ 1756:
 /***/ ((module) => {
 
@@ -20323,6 +20418,8 @@ const core = __nccwpck_require__(8864);
 const github = __nccwpck_require__(6366);
 const crypto = __nccwpck_require__(6113)
 const { Octokit } = __nccwpck_require__(9509);
+const getBranchSHA = __nccwpck_require__(3516);
+const tagCreate = __nccwpck_require__(291);
 
 try {
 
@@ -20357,36 +20454,34 @@ async function createTag({
     email,
     branch
 }) {
-    const octokit = new Octokit({
-        auth: personalToken
-    })
 
-    let branchData = octokit.request(`GET /repos/${owner}/${reponame}/branches/${branch}`, {
+    let object = await getBranchSHA({
+        token: personalToken,
         owner: owner,
         repo: reponame,
         branch: branch
     })
 
-    let object = branchData.data.commit.sha
-
-    let tagData = await octokit.request(`POST /repos/${owner}/${reponame}/git/tags`, {
-        owner: owner,
+    let tagSha = await tagCreate({
+        token: personalToken,
         repo: reponame,
+        owner: owner,
         tag: tag,
-        message: !message ? tag : message,
         object: object,
-        type: 'commit',
-        tagger: {
-            name: name,
-            email: email
-        }
+        name: name,
+        email: email,
+        message: message,
+    })
+
+    const octokit = new Octokit({
+        auth: personalToken
     })
 
     await octokit.request(`POST /repos/${owner}/${reponame}/git/refs`, {
         owner: owner,
         repo: reponame,
         ref: `refs/tags/${tag}`,
-        sha: tagData.data.sha
+        sha: tagSha
     })
 }
 })();
