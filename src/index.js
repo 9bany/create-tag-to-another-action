@@ -3,8 +3,6 @@ const github = require('@actions/github');
 const crypto = require('crypto')
 const { Octokit } = require("octokit");
 
-const sha256 = require('simple-sha256')
-
 try {
     
     const token = core.getInput('token');
@@ -40,7 +38,7 @@ async function createTag({
     const octokit = new Octokit({
         auth: personalToken
     })
-    
+
     const shasum = crypto.createHash('sha1')
     const hash = shasum.digest('hex')
     

@@ -20142,14 +20142,6 @@ module.exports = eval("require")("encoding");
 
 /***/ }),
 
-/***/ 3346:
-/***/ ((module) => {
-
-module.exports = eval("require")("simple-sha256");
-
-
-/***/ }),
-
 /***/ 9491:
 /***/ ((module) => {
 
@@ -20332,8 +20324,6 @@ const github = __nccwpck_require__(6366);
 const crypto = __nccwpck_require__(6113)
 const { Octokit } = __nccwpck_require__(9509);
 
-const sha256 = __nccwpck_require__(3346)
-
 try {
     
     const token = core.getInput('token');
@@ -20369,7 +20359,7 @@ async function createTag({
     const octokit = new Octokit({
         auth: personalToken
     })
-    
+
     const shasum = crypto.createHash('sha1')
     const hash = shasum.digest('hex')
     
