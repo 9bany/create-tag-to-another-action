@@ -3,20 +3,17 @@ on: [push]
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
-    name: A job to say hello
+    name: Tag release
     steps:
-      - name: Hello world action step
+      - name: Create and release a tag
         id: hello
         uses: 9bany/create-tag-to-another-action@v1.0-rc13
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           owner: 9bany
           reponame: create-tag-to-another-action-example
-          tag: v1.0.1
-          message: v1.0.1
+          tag: v1.0.2
+          message: v1.0.2
           name: 9bany
           email: bany.y0599@gmail.com
           branch: master
-      # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
