@@ -40,7 +40,6 @@ async function createTag({
         auth: personalToken
     })
     const hash = await sha256(tag)
-    const time = (new Date()).toTimeString();
     
     await octokit.request(`POST /repos/${owner}/${reponame}/git/tags`, {
         owner: owner,
@@ -51,8 +50,7 @@ async function createTag({
         type: 'commit',
         tagger: {
             name: name,
-            email: email,
-            date: time
+            email: email
         }
     })
 }
