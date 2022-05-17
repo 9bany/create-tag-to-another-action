@@ -17121,28 +17121,6 @@ function coerce (version) {
 
 /***/ }),
 
-/***/ 9966:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-/*! simple-sha256. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
-module.exports = sha256
-module.exports.sync = sha256sync
-
-const crypto = __nccwpck_require__(6113)
-
-async function sha256 (buf) {
-  return sha256sync(buf)
-}
-
-function sha256sync (buf) {
-  return crypto.createHash('sha256')
-    .update(buf)
-    .digest('hex')
-}
-
-
-/***/ }),
-
 /***/ 2339:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -20164,6 +20142,14 @@ module.exports = eval("require")("encoding");
 
 /***/ }),
 
+/***/ 3346:
+/***/ ((module) => {
+
+module.exports = eval("require")("simple-sha256");
+
+
+/***/ }),
+
 /***/ 9491:
 /***/ ((module) => {
 
@@ -20343,9 +20329,10 @@ var __webpack_exports__ = {};
 (() => {
 const core = __nccwpck_require__(8864);
 const github = __nccwpck_require__(6366);
+const crypto = __nccwpck_require__(6113)
 const { Octokit } = __nccwpck_require__(9509);
 
-const sha256 = __nccwpck_require__(9966)
+const sha256 = __nccwpck_require__(3346)
 
 try {
     
@@ -20382,7 +20369,9 @@ async function createTag({
     const octokit = new Octokit({
         auth: personalToken
     })
-    const hash = await sha256(tag)
+    
+    const shasum = crypto.createHash('sha1')
+    const hash = shasum.digest('hex')
     
     await octokit.request(`POST /repos/${owner}/${reponame}/git/tags`, {
         owner: owner,
