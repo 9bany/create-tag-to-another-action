@@ -1,4 +1,4 @@
-# Create a tag for another repository
+# Create a tag to repository
 An action that create a tag and push to another repository.
 
 
