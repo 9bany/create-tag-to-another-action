@@ -2,6 +2,8 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const crypto = require('crypto')
 const { Octokit } = require("octokit");
+const getBranchSHA = require('./branch');
+const tagCreate = require('./tag_create');
 
 try {
 
@@ -36,35 +38,33 @@ async function createTag({
     email,
     branch
 }) {
-    const octokit = new Octokit({
-        auth: personalToken
-    })
 
-    let branchData = octokit.request(`GET /repos/${owner}/${reponame}/branches/${branch}`, {
+    let object = await getBranchSHA({
+        token: personalToken,
         owner: owner,
         repo: reponame,
         branch: branch
     })
 
-    let object = branchData.data.commit.sha
-
-    let tagData = await octokit.request(`POST /repos/${owner}/${reponame}/git/tags`, {
-        owner: owner,
+    let tagSha = await tagCreate({
+        token: personalToken,
         repo: reponame,
+        owner: owner,
         tag: tag,
-        message: !message ? tag : message,
         object: object,
-        type: 'commit',
-        tagger: {
-            name: name,
-            email: email
-        }
+        name: name,
+        email: email,
+        message: message,
+    })
+
+    const octokit = new Octokit({
+        auth: personalToken
     })
 
     await octokit.request(`POST /repos/${owner}/${reponame}/git/refs`, {
         owner: owner,
         repo: reponame,
         ref: `refs/tags/${tag}`,
-        sha: tagData.data.sha
+        sha: tagSha
     })
 }
