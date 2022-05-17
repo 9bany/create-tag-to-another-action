@@ -1,7 +1,7 @@
 # Create tag
 An action that create a tag and push to repository.
 
-## Resolve cases
+## Cases resolved
 - [x] Triggering by other repository.
 - [x] Create a tag for a repository.
 ## Secrets
