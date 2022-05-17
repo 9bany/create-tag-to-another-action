@@ -40,17 +40,15 @@ async function createTag({
         auth: personalToken
     })
 
-    octokit.request(`GET /repos/${owner}/${reponame}/branches/${branch}`, {
+    let branchData = octokit.request(`GET /repos/${owner}/${reponame}/branches/${branch}`, {
         owner: owner,
         repo: reponame,
         branch: branch
     })
 
-    console.log(branch)
+    let object = branchData.data.commit.sha
 
-    let object = data.commit.sha
-
-    await octokit.request(`POST /repos/${owner}/${reponame}/git/tags`, {
+    let tagData = await octokit.request(`POST /repos/${owner}/${reponame}/git/tags`, {
         owner: owner,
         repo: reponame,
         tag: tag,
