@@ -29,7 +29,7 @@ jobs:
     steps:
       - name: Create and release a tag
         id: hello
-        uses: 9bany/create-tag-to-another-action@v1.0-rc13
+        uses: 9bany/create-tag-to-another-action@v1.0
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           owner: 9bany
