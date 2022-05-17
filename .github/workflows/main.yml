@@ -7,7 +7,7 @@ jobs:
     steps:
       - name: Hello world action step
         id: hello
-        uses: 9bany/create-tag-to-another-action@v1.0-rc1
+        uses: 9bany/create-tag-to-another-action@v1.0-rc2
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           owner: 9bany
