@@ -22,6 +22,9 @@ inputs:
   email:
     description: 'Your email'
     required: true
+  branch:
+    description: 'Branch your want to add tag'
+    required: true
 outputs:
   time: # id of output
     description: 'The time we greeted you'
