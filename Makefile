@@ -1,5 +1,8 @@
 build: 
 	ncc build src/index.js --license LICENSE 
-newTag: 
-	git tag -a -m $(name) $(name) && git push --follow-tags                            
-.PHONY: build
+tag: 
+	git tag -a -m $(name) $(name)
+push-tag:
+	git push --follow-tags                      
+	
+.PHONY: build tag push-tag

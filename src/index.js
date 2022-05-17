@@ -1,5 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+const { Octokit } = require("octokit");
+
 const sha256 = require('simple-sha256')
 
 try {
