@@ -1,5 +1,8 @@
 # Create tag
+
 An action that create a tag and push to repository.
+
+> 🚧 This repository has been archived by the owner. It is now read-only. check new [repo](https://github.com/browng-io/create-tag-to-another-action)
 
 ## Cases resolved
 - [x] Triggering by other repository.
